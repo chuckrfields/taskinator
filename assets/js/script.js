@@ -41,10 +41,29 @@ var createTaskHandler = function(event) {
     // console.log(event);
     event.preventDefault();
 
+    var taskNameInput = document.querySelector("input[name='task-name']").value;  //Use square brackets to select an HTML element by one of its attributes
+    // console.log(taskNameInput);
+    // console.dir(taskNameInput);  // Use DIR to Display data as a JavaScript object
+    var taskTypeInput = document.querySelector("select[name='task-type']").value;
+    // console.log(taskTypeInput);
+
+    // create list item
     var listItemEL = document.createElement("li");
     listItemEL.className = "task-item";
-    listItemEL.textContent = "This is a new task";
+
+    //Create div to hold task info and add to list item
+    var taskInfoEL = document.createElement("div");
+    // give it a class name
+    taskInfoEL.className = "task-info";
+    // add HTML content to div
+    taskInfoEL.innerHTML = "<h3 class ='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
+
+    listItemEL.appendChild(taskInfoEL);
+
+    // add entire list item to list
     tasksToDoEl.appendChild(listItemEL);
+
+    // console.dir(listItemEL);
 }
 
 formEL.addEventListener("submit", createTaskHandler);  //Captures the "submit" event within the form; the button type is "submit"; also the Enter key
