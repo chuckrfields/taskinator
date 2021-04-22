@@ -31,18 +31,23 @@ in console type:
     setTimeout: executes the callback after a set delay
 */
 
-var buttonEl = document.querySelector("#save-task");
+// var buttonEl = document.querySelector("#save-task"); //captures "click" event only, not the Enter key
+
+var formEL = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
 //Place callback function BEFORE button's addEventListener!
-var createTaskHandler = function() {
+var createTaskHandler = function(event) {
+    // console.log(event);
+    event.preventDefault();
+
     var listItemEL = document.createElement("li");
     listItemEL.className = "task-item";
     listItemEL.textContent = "This is a new task";
     tasksToDoEl.appendChild(listItemEL);
 }
 
-buttonEl.addEventListener("click", createTaskHandler);
+formEL.addEventListener("submit", createTaskHandler);  //Captures the "submit" event within the form; the button type is "submit"; also the Enter key
 
 
 
