@@ -47,6 +47,16 @@ var taskFormHandler = function(event) {
     var taskTypeInput = document.querySelector("select[name='task-type']").value;
     // console.log(taskTypeInput);
 
+    // Validate: Check if input values are empty strings
+    if (!taskNameInput || !taskTypeInput) {  //Empty strings and the number 0 are evaluated as FALSY values, So with ! we're checking to see if either are falsy
+        // So, this code literally says, "if either one or both of the variables are not true, then proceed," which is the same as "if either one or both of the variables are false, then proceed."
+        alert("You need to fill out the task form!");
+        return false;
+    }
+
+    // reset form since values are saved in variables
+    formEL.reset();
+
     // package up data as an object
     var taskDataObj = {
         name: taskNameInput,
