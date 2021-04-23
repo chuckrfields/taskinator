@@ -36,6 +36,29 @@ var taskIdCounter = 0;
 var formEL = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
+// Add event listener to main section
+var pageContentEL = document.querySelector("#page-content");
+
+var taskButtonHandler = function(event) {
+    // console.log(event.target);
+
+    // get target element from event
+    var targetEL = event.target;
+
+    // edit button was clicked
+    if (event.target.matches(".edit-btn")) {
+        var taskId = targetEL.getAttribute("data-task-id");
+        editTask(taskId);
+    }
+
+    else if (event.target.matches(".delete-btn")) {
+        var taskId = targetEL.getAttribute("data-task-id");
+        deleteTask(taskId);
+    }
+}
+
+pageContentEL.addEventListener("click", taskButtonHandler);
+
 //Place callback function BEFORE button's addEventListener!
 var taskFormHandler = function(event) {
     // console.log(event);
@@ -89,8 +112,6 @@ var createTaskEl = function(taskDataObj) {
   var taskActionsEL = createTaskActions(taskIdCounter);
   listItemEL.appendChild(taskActionsEL);
 
-    //   console.log(taskActionsEL);
-
   // add entire list item to list
   tasksToDoEl.appendChild(listItemEL);
 
@@ -142,6 +163,33 @@ var createTaskActions = function(taskId)  {
 
      return actionContainerEL;
 };
+
+var deleteTask = function(taskId) {
+    /*
+        notice that there's no space between the .task-item and the [data-task-id] attribute, which means that both properties must be on the same element; 
+        a space would look for a element with the [data-task-id] attribute somewhere inside a .task-item element.
+    */
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    taskSelected.remove();
+    // console.log(taskSelected);
+}
+
+var editTask = function(taskId) {
+    // console.log("editing task #" + taskId);
+
+    // get task list item element
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    // get content from task name and type
+    var taskName = taskSelected.querySelector("h3.task-name").textContent;
+    var taskType = taskSelected.querySelector("span.task-type").textContent;
+
+    document.querySelector("input[name='task-name']").value = taskName;
+    document.querySelector("select[name='task-type']").value = taskType;
+    document.querySelector("#save-task").textContent = "Save Task";
+
+    formEL.setAttribute("data-task-id", taskId);
+}
 
 formEL.addEventListener("submit", taskFormHandler);  //Captures the "submit" event within the form; the button type is "submit"; also the Enter key
 
