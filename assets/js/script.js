@@ -32,7 +32,7 @@ in console type:
 */
 
 // var buttonEl = document.querySelector("#save-task"); //captures "click" event only, not the Enter key
-
+var taskIdCounter = 0;
 var formEL = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
@@ -73,6 +73,9 @@ var createTaskEl = function(taskDataObj) {
   var listItemEL = document.createElement("li");
   listItemEL.className = "task-item";
 
+  // add task id as a custom attribute
+  listItemEL.setAttribute("data-task-id", taskIdCounter);
+
   //Create div to hold task info and add to list item
   var taskInfoEL = document.createElement("div");
   // give it a class name
@@ -82,11 +85,63 @@ var createTaskEl = function(taskDataObj) {
 
   listItemEL.appendChild(taskInfoEL);
 
+  // create drop down
+  var taskActionsEL = createTaskActions(taskIdCounter);
+  listItemEL.appendChild(taskActionsEL);
+
+    //   console.log(taskActionsEL);
+
   // add entire list item to list
   tasksToDoEl.appendChild(listItemEL);
 
+  // increase task counter for next unique id
+  taskIdCounter++;
+
   // console.dir(listItemEL);
 }
+
+var createTaskActions = function(taskId)  {
+    var actionContainerEL = document.createElement("div");
+    actionContainerEL.className = "task-actions";
+
+    // create edit button
+    var editButtonEL = document.createElement("button");
+    editButtonEL.textContent = "Edit";
+    editButtonEL.className = "btn edit-btn";
+    editButtonEL.setAttribute("data-task-id", taskId);
+
+    actionContainerEL.appendChild(editButtonEL);
+
+    // create delete button
+    var deleteButtonEL = document.createElement("button");
+    deleteButtonEL.textContent = "Delete";
+    deleteButtonEL.className = "btn delete-btn";
+    deleteButtonEL.setAttribute("data-task-id", taskId);
+
+    actionContainerEL.appendChild(deleteButtonEL);
+
+    // create dropdown
+    var statusSelectEL = document.createElement("select");
+    statusSelectEL.className = "select-status";
+    statusSelectEL.setAttribute("name", "status-change");
+    statusSelectEL.setAttribute("data-task-id", taskId);
+
+    var statusChoices = ["To Do", "In Progress", "Completed"];
+
+    for (var i = 0; i < statusChoices.length; i++) {
+        // create option element
+        var statusOptionEL = document.createElement("option");
+        statusOptionEL.textContent = statusChoices[i];
+        statusOptionEL.setAttribute("value", statusChoices[i]);
+
+        // append to select
+        statusSelectEL.appendChild(statusOptionEL);
+    }
+
+    actionContainerEL.appendChild(statusSelectEL);
+
+     return actionContainerEL;
+};
 
 formEL.addEventListener("submit", taskFormHandler);  //Captures the "submit" event within the form; the button type is "submit"; also the Enter key
 
